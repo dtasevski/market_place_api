@@ -30,3 +30,9 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 .idea/
+
+# Extra files to ignore
+doc/
+*.swp
+*~
+.DS_Store
