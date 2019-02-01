@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   require 'api_constraints'
 
   namespace :api, defaults: { format: :json} do
