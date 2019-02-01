@@ -1,0 +1,19 @@
+require 'rails_helper'
+
+describe 'ApiConstraints' do
+  let(:api_constraints_v1) { ApiConstraints.new(version: 1) }
+  let(:api_constraints_v2) { ApiConstraints.new(version: 2, default: true) }
+
+  describe 'matches?' do
+    it "returns true when version matches the Accept Header" do
+      request = double(host: "localhost:3000/api",
+                       headers: { "Accept" => "application/vnd.marketplace.v1"})
+      expect(api_constraints_v1.matches?(request)).to be true
+    end
+
+    it "returns the default version when 'default' option is specified" do
+      request = double(host: "localhost:3000/api")
+      expect(api_constraints_v2.matches?(request)).to be true
+    end
+  end
+end
