@@ -3,11 +3,11 @@ class Api::V1::ProductsController < ApplicationController
   before_action :authenticate_with_token!, only: [:create, :update]
 
   def show
-    render json: {product: Product.find(params[:id]) }
+    respond_with Product.find(params[:id])
   end
 
   def index
-    render json: { products: Product.all  }
+    respond_with Product.all
   end
 
   def create
