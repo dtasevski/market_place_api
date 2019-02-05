@@ -12,6 +12,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       expect(json_response[:user][:email]).to eql(@user.email)
     end
 
+    it "has the product ids as embedded object" do
+      expect(json_response[:user][:product_ids]).to eql []
+    end
+
     it { should respond_with 200 }
   end
 

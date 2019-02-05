@@ -22,20 +22,39 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
   describe "GET #index" do
     before(:each) do
       4.times { FactoryBot.create :product }
-      get :index
     end
 
-    it "returns 4 records from the database" do
-      expect(json_response[:products].length).to eq(4)
+    context "when is not getting any product_ids parameter" do
+      before(:each) do
+        get :index
+      end
+
+      it "returns 4 records from the database" do
+        expect(json_response[:products].length).to eq(4)
+      end
+
+      it "returns the user object into each product" do
+        json_response[:products].each do |product_response|
+          expect(product_response[:user]).to be_present
+        end
+      end
+
+      it { should respond_with 200 }
     end
 
-    it "returns the user object into each product" do
-      json_response[:products].each do |product_response|
-        expect(product_response[:user]).to be_present
+    context "when is getting product_ids parameter" do
+      before(:each) do
+        @user = FactoryBot.create :user
+        3.times { FactoryBot.create :product, user: @user }
+        get :index, params: { product_ids: @user.product_ids }
+      end
+
+      it "returns just the products that belong to the user" do
+        json_response[:products].each do |product_response|
+          expect(product_response[:user][:email]).to eql @user.email
+        end
       end
     end
-
-    it { should respond_with 200 }
   end
 
   describe "POST #create" do
