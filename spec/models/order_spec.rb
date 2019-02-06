@@ -12,4 +12,16 @@ RSpec.describe Order, type: :model do
   it { should belong_to :user }
   it { should have_many :placements }
   it { should have_many(:products).through(:placements) }
+
+  describe "#set_total!" do
+    before(:each) do
+      product_1 = FactoryBot.create :product, price: 100
+      product_2 = FactoryBot.create :product, price: 85
+      @order = FactoryBot.create :order, product_ids: [ product_1.id, product_2.id ]
+    end
+
+    it "returns the total of the order" do
+      expect{ @order.set_total! }.to change{@order.total}.from(0).to(185)
+    end
+  end
 end
